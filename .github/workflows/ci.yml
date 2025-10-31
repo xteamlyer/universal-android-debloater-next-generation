@@ -37,6 +37,8 @@ jobs:
             args: " --all-features -- -D clippy::all -W clippy::style"
           - lint: check
             args: " --all-features"
+            env:
+                RUSTFLAGS: "-D warnings"
           - lint: test
             args: ""
           - lint: clippy
@@ -58,7 +60,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy,rustfmt
-      - run: cargo ${{ matrix.lint }}${{ matrix.args }}
+      - run: |
+          RUSTFLAGS='${{ matrix.env.RUSTFLAGS }}' cargo ${{ matrix.lint }}${{ matrix.args }}
 
   coverage:
     name: coverage
